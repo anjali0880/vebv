@@ -4,6 +4,7 @@ class ApiConstants {
   static const String createEmployeeAccount= '$baseUrl/account/add';
   static const String deleteTicket= '$baseUrl/field/deleteTicket';
   static const String deleteTask= '$baseUrl/field/deletetask';
+  static const String assignTask= '$baseUrl/field/assigntask';
 
 }
 class
