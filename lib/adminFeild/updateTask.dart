@@ -2,17 +2,19 @@ import 'package:check/adminFeild/AdminDashboard.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../provider/constants.dart';
+import '../provider/selected_task_provider.dart';
 
-class TaskAssignmentForm extends StatefulWidget {
-  const TaskAssignmentForm({Key? key}) : super(key: key);
+class TaskUpdateForm extends StatefulWidget {
+  const TaskUpdateForm({Key? key}) : super(key: key);
 
   @override
-  _TaskAssignmentFormState createState() => _TaskAssignmentFormState();
+  _TaskUpdateFormState createState() => _TaskUpdateFormState();
 }
 
-class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
+class _TaskUpdateFormState extends State<TaskUpdateForm> {
   final _formKey = GlobalKey<FormState>();
   final List<TicketEntry> _tickets = [];
   bool _isLoading = false;
@@ -25,8 +27,9 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
   @override
   void initState() {
     super.initState();
-    // Initialize with a single ticket
     _tickets.add(TicketEntry());
+    final selectedTask = Provider.of<SelectedTaskProvider>(context, listen: false).selectedTask;
+    print('Selected Task Data: $selectedTask');
   }
 
   void _addNewTicket() {
@@ -51,12 +54,15 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
   }
 
   Future<void> _submitForm() async {
+    final selectedTask = Provider.of<SelectedTaskProvider>(context).selectedTask;
+
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       _formKey.currentState!.save();
 
       try {
         var requestBody = {
+          '_id':selectedTask?.taskId,
           "taskName": taskName,
           "userId": userId,
           "userName": userName,
@@ -110,7 +116,8 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
 
   InputDecoration _buildInputDecoration(String label, IconData icon) {
     return InputDecoration(
-      labelText: label,
+
+      //labelText: label,
       prefixIcon: Icon(icon),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -131,11 +138,13 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedTask = Provider.of<SelectedTaskProvider>(context).selectedTask;
+    print('Selected Task: $selectedTask');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade800,
         foregroundColor: Colors.white,
-        title: const Text('Assign Task'),
+        title: const Text('Update Task'),
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -180,6 +189,7 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
                         child: Column(
                           children: [
                             TextFormField(
+                              initialValue: selectedTask?.taskName, // This value will be shown in the input field
                               decoration: _buildInputDecoration('Task Name', Icons.task),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -189,9 +199,11 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
                               },
                               onSaved: (value) => taskName = value!,
                             ),
+
                             const SizedBox(height: 16),
                             TextFormField(
-                              decoration: _buildInputDecoration('User ID', Icons.person),
+                              initialValue: selectedTask?.userId, // This value will be shown in the input field
+                              decoration: _buildInputDecoration('User Id', Icons.person),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter user ID';
@@ -200,8 +212,10 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
                               },
                               onSaved: (value) => userId = value!,
                             ),
+
                             const SizedBox(height: 16),
                             TextFormField(
+                              initialValue: selectedTask?.userName, // This value will be shown in the input field
                               decoration: _buildInputDecoration('User Name', Icons.badge),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -211,6 +225,7 @@ class _TaskAssignmentFormState extends State<TaskAssignmentForm> {
                               },
                               onSaved: (value) => userName = value!,
                             ),
+
                           ],
                         ),
                       ),
@@ -404,7 +419,7 @@ Future<void> AssignTask(String requestBody) async {
     'x-dhundhoo-session': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJhZG1pbkBkaHVuZGhvby5jb20iLCJyb2xlIjoiQURNSU4iLCJvcmdIYW5kbGUiOiI0NTlmOTc3ZC05ZDU3LTQ3ZWMtOTllMy02YmRhNDQ2NGQzYmIiLCJhY2Nlc3NDb2RlIjoiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjBiMnRsYmlJNklqbGpNalE1WXpJMUxUa3hObVl0TkRBME9DMWlOalZoTFRsaU9HWmlOemhsTXpsaE9DSXNJblJwYldWemRHRnRjQ0k2TVRjeU16QXlOalEwTmpJMk5IMC5qTVRVQTJkOTJZa1V4bEJ1bVFtb0hPQzdWY0dkallsV1o2bHVqak50bzdjIiwidGltZVpvbmUiOiJVVEMrMDU6MzAiLCJ0eXBlIjoiREhVTkRIT08iLCJ2ZXJzaW9uIjoiMC4yLjAiLCJwbGF0Zm9ybSI6IldFQiIsImV4cGlyZXNBdCI6MTcyMzExMjg1NjM2OH0.ico7pR8rISZcAZZWqfJ3gpGURL1Huiuj_WqLcGNubms',
     'Content-Type': 'application/json'
   };
-print('request body $requestBody');
+  print('request body $requestBody');
   var request = http.Request('POST',Uri.parse('$url?x-dhundhoo-session=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJtYXJncmVnb3Jpb3NzY2hvb2xAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwib3JnSGFuZGxlIjoiZDYwMGUzZmItMzE5Yy00MjRiLTlkZjYtZjVmNDk4ZDg1MGEyIiwiYWNjZXNzQ29kZSI6ImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUowYjJ0bGJpSTZJbUptWWpJMU9XTTBMVGM1T0dJdE5HVmpaQzA1TnpRM0xUVTFNemcxWXpRMllUUmlPQ0lzSW5ScGJXVnpkR0Z0Y0NJNk1UY3lPVFU0TURVME9UUXhNbjAuNENYYURoREJhVkFtSHM0NUtTb2l2UG0zRUJ6ejRWTVlnYVpxWGhlT1phRSIsInRpbWVab25lIjoiVVRDKzA1OjMwIiwidHlwZSI6Ik9SRyIsInZlcnNpb24iOiIwLjIuMCIsInBsYXRmb3JtIjoiV0VCIiwiZXhwaXJlc0F0IjoxNzI5NjY2OTQ5NTczfQ.MhorJ9_0uAkMNgzeUe-F_oO1eFU1YZhd_fBEltPWXBE'));
   request.body = requestBody;
   request.headers.addAll(headers);
