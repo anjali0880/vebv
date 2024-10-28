@@ -1,8 +1,10 @@
 
 import 'package:check/Home.dart';
+import 'package:check/adminFeild/adminDrawerScreen.dart';
 import 'package:check/adminFeild/assignTask.dart';
 import 'package:check/adminFeild/task_detail_screen.dart';
 import 'package:check/adminFeild/updateTask.dart';
+import 'package:check/provider/adminInfoProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/constants.dart';
@@ -24,6 +26,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TaskProvider>(context, listen: false).fetchTasks();
     });
@@ -74,7 +77,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           }),
         ],
       ),
-      drawer: _buildDrawer(),
+        drawer: AdminDrawer(),
 
       body: taskProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -115,6 +118,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildDrawer() {
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -132,7 +136,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'I am Admin',
+                    'admin',
+
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -174,6 +179,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       ),
     );
   }
+
 }
 
 
@@ -272,6 +278,7 @@ class TaskCardsSection extends StatelessWidget {
                                       onPressed: () {
                                         Provider.of<SelectedTaskProvider>(context, listen: false)
                                             .selectTask(task);
+                                        print('selectedTask $task');
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(

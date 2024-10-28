@@ -21,7 +21,9 @@ class TaskProvider extends ChangeNotifier {
       var response = await http.get(Uri.parse(fetchTaskUrl), headers: headers);
 
       if (response.statusCode == 200) {
+
         var data = jsonDecode(response.body) as List;
+
         _tasks = data.map((taskJson) => Task.fromJson(taskJson)).toList();
       } else {
         print('Error: ${response.reasonPhrase}');
