@@ -2,6 +2,7 @@
 import 'package:check/Home.dart';
 import 'package:check/adminFeild/assignTask.dart';
 import 'package:check/adminFeild/task_detail_screen.dart';
+import 'package:check/adminFeild/updateTask.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/constants.dart';
@@ -179,162 +180,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
 
 
-// class TaskCardsSection extends StatelessWidget {
-//   final List<Task> tasks;
-//
-//   const TaskCardsSection({required this.tasks});
-//
-//   Future<void> deleteTask(String taskId) async {
-//     const String url = ApiConstants.deleteTask;
-//     var headers = {
-//       'x-dhundhoo-session':
-//           'session'
-//     };
-//
-//     var request = http.Request('DELETE', Uri.parse('$url?taskId=$taskId'));
-//     request.body = '''''';
-//     request.headers.addAll(headers);
-//
-//     http.StreamedResponse response = await request.send();
-//
-//     if (response.statusCode == 200) {
-//       print(await response.stream.bytesToString());
-//     } else {
-//       print(response.reasonPhrase);
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: SizedBox(
-//         child: Container(
-//           decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(16),
-//             boxShadow: const [
-//               BoxShadow(
-//                 color: Colors.black12,
-//                 blurRadius: 10,
-//                 offset: Offset(0, 8),
-//               ),
-//             ],
-//           ),
-//           child: Card(
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(12.0),
-//             ),
-//             child: Padding(
-//               padding: const EdgeInsets.all(16.0),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Container(
-//                     padding: const EdgeInsets.all(5.0),
-//                     decoration: BoxDecoration(
-//                       color: Colors.grey.shade500,
-//                       borderRadius: BorderRadius.circular(12.0),
-//                     ),
-//                     child: const Center(
-//                       child: Text(
-//                         'Task List',
-//                         style: TextStyle(
-//                           fontSize: 24,
-//                           fontWeight: FontWeight.bold,
-//                           color: Colors.black87,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(height: 16),
-//                   ...tasks.map((task) {
-//                     return GestureDetector(
-//                       onTap: () {
-//                         Provider.of<SelectedTaskProvider>(context, listen: false)
-//                             .selectTask(task);
-//                         Navigator.push(
-//                           context,
-//                           MaterialPageRoute(
-//                               builder: (context) => TaskDetailScreen()),
-//                         );
-//                       },
-//                       child: SizedBox(
-//                         width: double.infinity,
-//                         child: Card(
-//                           margin: const EdgeInsets.symmetric(vertical: 8.0),
-//                           shape: RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(8.0),
-//                           ),
-//                           child: Padding(
-//                             padding: const EdgeInsets.all(16.0),
-//                             child: Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Row(
-//                                   children: [
-//                                     Expanded(
-//                                       child: Text(
-//                                         task.taskName,
-//                                         style: const TextStyle(
-//                                           fontSize: 18,
-//                                           fontWeight: FontWeight.bold,
-//                                           color: Colors.blueGrey,
-//                                         ),
-//                                       ),
-//                                     ),
-//                                     IconButton(
-//                                       icon: const Icon(Icons.delete_outline, color: Colors.red),
-//                                       onPressed: () {
-//                                         deleteTask(task.taskId);  // Pass the taskId here
-//                                       },
-//                                     ),
-//                                   ],
-//                                 ),
-//                                 Divider(color: Colors.blueGrey[700]),
-//                                 Text(
-//                                   'Assigned To: ${task.userId ?? 'N/A'}',
-//                                   style: const TextStyle(
-//                                     fontSize: 16,
-//                                     color: Colors.black,
-//                                   ),
-//                                 ),
-//                                 Text(
-//                                   'Assigned To: ${task.userName ?? 'N/A'}',
-//                                   style: const TextStyle(
-//                                     fontSize: 16,
-//                                     color: Colors.black,
-//                                   ),
-//                                 ),
-//                                 Text(
-//                                   'taskId: ${task.taskId ?? 'N/A'}',
-//                                   style: const TextStyle(
-//                                     fontSize: 16,
-//                                     color: Colors.black,
-//                                   ),
-//                                 ),
-//                                 Text(
-//                                   'Completion Status: ${task.perStatus != null ? '${task.perStatus}%' : ''}',
-//                                   style: const TextStyle(
-//                                     fontSize: 16,
-//                                     color: Colors.black,
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     );
-//                   }).toList(),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
+
 
 
 class TaskCardsSection extends StatelessWidget {
@@ -420,6 +266,20 @@ class TaskCardsSection extends StatelessWidget {
                                           color: Colors.blueGrey,
                                         ),
                                       ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit_note, color:  Color(0xFF004D40),),
+                                      onPressed: () {
+                                        Provider.of<SelectedTaskProvider>(context, listen: false)
+                                            .selectTask(task);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => TaskUpdateForm(),
+                                          ),
+                                        );
+
+                                      },
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.delete_outline, color: Colors.red),
