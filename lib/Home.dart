@@ -63,8 +63,9 @@ class DashboardSelectionScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    //MaterialPageRoute(builder: (context) => MobileNumberInputScreen()),
-                    MaterialPageRoute(builder: (context) => TaskHomePage()),
+                    MaterialPageRoute(builder: (context) => EmployeeDashboard()),
+
+                  //  MaterialPageRoute(builder: (context) => MobileNumberInputScreen()),
                   );
                 },
               ),

@@ -40,7 +40,8 @@ class AdminProvider with ChangeNotifier {
   Future<void> fetchAdminInfo() async {
     const String url = AuthApiConstants.adminInfo;
     var headers = {
-      'x-dhundhoo-session': 'your-session-token'
+      'x-dhundhoo-session':
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJhZG1pbi50bWtAcGViYmxlY3JlZWtsaWZlc2Nob29sLmluIiwicm9sZSI6IkFETUlOIiwib3JnSGFuZGxlIjoiZGRiZGFhMmUtZmJiYi00ZjNjLWEyODAtZmNmYmJhY2QzZTM1IiwiYWNjZXNzQ29kZSI6ImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUowYjJ0bGJpSTZJbUptWWpJMU9XTTBMVGM1T0dJdE5HVmpaQzA1TnpRM0xUVTFNemcxWXpRMllUUmlPQ0lzSW5ScGJXVnpkR0Z0Y0NJNk1UY3lPVGswTnpVNE5ESXpOSDAuLXBmRTJWNGhtYlgwRFBoa3o1N2NIZHpPZ211TzFZUzBDVkUwdU8wcEhLSSIsInRpbWVab25lIjoiVVRDKzA1OjMwIiwidHlwZSI6Ik9SRyIsInZlcnNpb24iOiIwLjIuMCIsInBsYXRmb3JtIjoiV0VCIiwiZXhwaXJlc0F0IjoxNzMwMDMzOTk4ODk3fQ.XEuIY-lqpWp52pIFqnT2ZD6y5d1siGqZB5K_XCUGT-0'
     };
 
     try {

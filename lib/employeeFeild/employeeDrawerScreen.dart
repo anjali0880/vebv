@@ -6,14 +6,14 @@ import 'package:url_launcher/url_launcher.dart';
 import '../provider/constants.dart';
 import 'package:http/http.dart' as http;
 
-class AdminDrawer extends StatefulWidget {
-  const AdminDrawer({super.key});
+class CustomDrawer extends StatefulWidget {
+  const CustomDrawer({super.key});
 
   @override
-  _AdminDrawerState createState() => _AdminDrawerState();
+  _CustomDrawerState createState() => _CustomDrawerState();
 }
 
-class _AdminDrawerState extends State<AdminDrawer> {
+class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -86,17 +86,8 @@ class _AdminDrawerState extends State<AdminDrawer> {
                   },
                 ),
                 IconButton(
-                  icon: FaIcon(FontAwesomeIcons.facebook, color: Colors.black),
-                  onPressed: () async {
-                    const url = 'https://m.facebook.com/dhundhoo';
-                    final Uri uri = Uri.parse(url);
-
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
+                  icon: FaIcon(FontAwesomeIcons.twitter, color: Colors.black),
+                  onPressed: () {},
                 ),
               ],
             ),
@@ -115,7 +106,7 @@ class CustomDrawerHeader extends StatefulWidget {
 }
 
 class _CustomDrawerHeaderState extends State<CustomDrawerHeader> {
-
+  String employeeName = 'Employee Name';
   String avatarUrl = "assets/avatar1.png";
   String email = "I am Admin";
   String fristName = " ";
@@ -125,33 +116,32 @@ class _CustomDrawerHeaderState extends State<CustomDrawerHeader> {
   @override
   void initState() {
     super.initState();
-    fetchAdminInfo();
+    fetchEmployeeInfo();
   }
 
-  Future<void> fetchAdminInfo() async {
-    const String url = AuthApiConstants.adminInfo;
+  Future<void> fetchEmployeeInfo() async {
+    const String url = AuthApiConstants.employeeAuth;
     var headers = {
-      'x-dhundhoo-session': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJhZG1pbi50bWtAcGViYmxlY3JlZWtsaWZlc2Nob29sLmluIiwicm9sZSI6IkFETUlOIiwib3JnSGFuZGxlIjoiZGRiZGFhMmUtZmJiYi00ZjNjLWEyODAtZmNmYmJhY2QzZTM1IiwiYWNjZXNzQ29kZSI6ImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUowYjJ0bGJpSTZJbUptWWpJMU9XTTBMVGM1T0dJdE5HVmpaQzA1TnpRM0xUVTFNemcxWXpRMllUUmlPQ0lzSW5ScGJXVnpkR0Z0Y0NJNk1UY3lPVGswTnpVNE5ESXpOSDAuLXBmRTJWNGhtYlgwRFBoa3o1N2NIZHpPZ211TzFZUzBDVkUwdU8wcEhLSSIsInRpbWVab25lIjoiVVRDKzA1OjMwIiwidHlwZSI6Ik9SRyIsInZlcnNpb24iOiIwLjIuMCIsInBsYXRmb3JtIjoiV0VCIiwiZXhwaXJlc0F0IjoxNzMwMDMzOTk4ODk3fQ.XEuIY-lqpWp52pIFqnT2ZD6y5d1siGqZB5K_XCUGT-0'
+      'x-dhundhoo-session':
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI5MTg0MTI5MjAwMzIiLCJyb2xlIjoiVVNFUiIsIm9yZ0hhbmRsZSI6bnVsbCwiYWNjZXNzQ29kZSI6ImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUowYjJ0bGJpSTZJall4T1RNMU16Y3lZakV5WW1Oa05ETWlMQ0owYVcxbGMzUmhiWEFpT2pFM01qZzBOVFUwTlRFMk1UQjkuUlBtV0ota1VnRzVhVGFBbEhPVDd0a043ZGgwRlNnMlAxRFVud3NDS2RwRSIsInRpbWVab25lIjoiQXNpYS9DYWxjdXR0YSIsInR5cGUiOiJQRVJTT05BTCIsInZlcnNpb24iOiIxLjAuMCIsInBsYXRmb3JtIjoiQU5EUk9JRCIsImV4cGlyZXNBdCI6MTczMDE4ODY2ODE0NX0.P-Wt_01o4VwTek0r5J6fmdOCp4MBLok5FG4uP1YCqDw'
     };
 
     var response = await http.get(Uri.parse(url), headers: headers);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print(data);
       setState(() {
-        avatarUrl = data['accountModel']['account']['avatar'] ??
-            "assets/avatar1.png";
-        fristName=data['accountModel']['account']['firstName'] ?? " ";
-        LastName=data['accountModel']['account']['lastName'] ?? " ";
+        avatarUrl = data['accountModel']['account']['avatar'] ?? "assets/avatar1.png";
+        fristName = data['accountModel']['account']['firstName'] ?? " ";
+        LastName = data['accountModel']['account']['lastName'] ?? " ";
         email = data['accountModel']['account']['emailId'] ?? "I am Admin";
-        phoneNumber = data['accountModel']['account']['phoneNumber'] ??
-            "Not Available";
+        phoneNumber = data['accountModel']['account']['phoneNumber'] ?? "Not Available";
       });
     } else {
       print("Error: ${response.reasonPhrase}");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

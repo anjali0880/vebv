@@ -2,6 +2,9 @@ import 'package:check/Home.dart';
 import 'package:check/adminFeild/loginPage.dart';
 import 'package:check/adminFeild/AdminDashboard.dart'; // Your MobileDashboardScree
 import 'package:check/provider/adminInfoProvider.dart';
+import 'package:check/provider/employee_task_provider.dart';
+import 'package:check/provider/selected_employeetask_Provider.dart';
+
 import 'package:check/provider/selected_task_provider.dart';
 import 'package:check/provider/taskProvider.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +17,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => TaskProvider()),
         ChangeNotifierProvider(create: (_) => SelectedTaskProvider()),
-
+        ChangeNotifierProvider(create: (_) => EmployeeTaskProvider()),
+        ChangeNotifierProvider(create: (_) => SelectedEmployeeTaskProvider()),
       ],
       child: MyApp(),
     ),

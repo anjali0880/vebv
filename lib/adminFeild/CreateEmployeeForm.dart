@@ -23,7 +23,7 @@ class _AccountCreationScreenState extends State<AccountCreationScreen> {
   String? selectedGender;
 
   Future<void> createEmployeeAccount() async {
-    const url = ApiConstants.createEmployeeAccount;
+    const url = AdminApiConstants.createEmployeeAccount;
     var headers = {
       'x-dhundhoo-session':
           'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJtYXJncmVnb3Jpb3NzY2hvb2xAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwib3JnSGFuZGxlIjoiZDYwMGUzZmItMzE5Yy00MjRiLTlkZjYtZjVmNDk4ZDg1MGEyIiwiYWNjZXNzQ29kZSI6ImV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUowYjJ0bGJpSTZJakkxWW1WbFpESmpMVGc0Wm1NdE5EaGtNaTA0TkdFNExUSm1Zak5sWkRRM1l6RmpOeUlzSW5ScGJXVnpkR0Z0Y0NJNk1UY3lPVFU0TVRZME1Ea3lOMzAuNnc0OUhzWERRQ0ZfSDMzdkdJN1M3Unl5dUxmaFFvNndPdDhvcWtSY1p2dyIsInRpbWVab25lIjoiVVRDKzA1OjMwIiwidHlwZSI6Ik9SRyIsInZlcnNpb24iOiIwLjIuMCIsInBsYXRmb3JtIjoiV0VCIiwiZXhwaXJlc0F0IjoxNzI5Njc3MDU5NTc0fQ.jYo3UoskR9D8iwn3aMuH1Z1OzoIUAq9x8nq3I7AOPFk',
@@ -68,6 +68,7 @@ class _AccountCreationScreenState extends State<AccountCreationScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +76,7 @@ class _AccountCreationScreenState extends State<AccountCreationScreen> {
           'Create Account',
           style: TextStyle(color: Colors.white, fontSize: 22),
         ),
-        backgroundColor: Colors.grey.shade800,
+        backgroundColor: Colors.blueGrey.shade900,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -90,11 +91,11 @@ class _AccountCreationScreenState extends State<AccountCreationScreen> {
         ),
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.deepOrangeAccent, Colors.orange],
+            colors: [Colors.blueGrey[900]!, Colors.blueGrey[900]!], // Corrected syntax
           ),
         ),
         child: Padding(
@@ -178,6 +179,7 @@ class _AccountCreationScreenState extends State<AccountCreationScreen> {
       ),
     );
   }
+
 
   Widget _buildTextField(
       {required String label, required TextEditingController controller}) {

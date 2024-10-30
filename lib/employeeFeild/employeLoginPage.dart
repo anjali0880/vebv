@@ -190,9 +190,4 @@ class _MobileNumberInputScreenState extends State<MobileNumberInputScreen> {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    theme: ThemeData.dark(),
-    home: MobileNumberInputScreen(),
-  ));
-}
+
