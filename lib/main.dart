@@ -1,7 +1,8 @@
+import 'package:background_location_tracker/background_location_tracker.dart';
 import 'package:check/Home.dart';
-import 'package:check/adminFeild/loginPage.dart';
+
 import 'package:check/adminFeild/AdminDashboard.dart'; // Your MobileDashboardScree
-import 'package:check/provider/adminInfoProvider.dart';
+
 import 'package:check/provider/employee_task_provider.dart';
 import 'package:check/provider/selected_employeetask_Provider.dart';
 
@@ -10,8 +11,29 @@ import 'package:check/provider/taskProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'employeeFeild/employeemap.dart';
 
-void main() {
+
+
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await BackgroundLocationTrackerManager.initialize(
+    backgroundCallback,
+    config: const BackgroundLocationTrackerConfig(
+      loggingEnabled: true,
+      androidConfig: AndroidConfig(
+        notificationIcon: 'explore',
+        trackingInterval: Duration(seconds: 4),
+        distanceFilterMeters: null,
+      ),
+      iOSConfig: IOSConfig(
+        activityType: ActivityType.FITNESS,
+        distanceFilterMeters: null,
+        restartAfterKill: true,
+      ),
+    ),
+  );
   runApp(
     MultiProvider(
       providers: [

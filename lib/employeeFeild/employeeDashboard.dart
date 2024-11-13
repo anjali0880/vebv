@@ -1,4 +1,5 @@
 import 'package:check/employeeFeild/employeeDrawerScreen.dart';
+import 'package:check/employeeFeild/employeemap.dart';
 import 'package:check/employeeFeild/selectedTaskDetailScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -146,6 +147,24 @@ class _TasksOverviewCardState extends State<TasksOverviewCard> {
                                   color: Colors.grey[700],
                                 ),
                                 onPressed: () {
+                                  // Optional: Provide additional task details on tap
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.share_location,
+                                  color: Colors.grey[700],
+                                ),
+                                onPressed: () {
+                                  Provider.of<SelectedEmployeeTaskProvider>(context, listen: false)
+                                      .setSelectedEmployeeTask(task);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>  EmployeeMapComponent(),
+                                    ),
+                                  );
+
                                   // Optional: Provide additional task details on tap
                                 },
                               ),

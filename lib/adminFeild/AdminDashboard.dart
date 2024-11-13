@@ -4,17 +4,18 @@ import 'package:check/adminFeild/adminProfile.dart';
 import 'package:check/adminFeild/assignTask.dart';
 import 'package:check/adminFeild/task_detail_screen.dart';
 import 'package:check/adminFeild/updateTask.dart';
-import 'package:check/provider/adminInfoProvider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../provider/constants.dart';
+
 import '../provider/task_model.dart';
 import '../provider/taskProvider.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:check/adminFeild/AdminMap.dart';
 import 'package:check/adminFeild/CreateEmployeeForm.dart';
 import '../provider/selected_task_provider.dart';
+
+
 
 class AdminDashboardScreen extends StatefulWidget {
   @override
@@ -27,10 +28,25 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   void initState() {
     super.initState();
+    // Fetch tasks on initialization
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TaskProvider>(context, listen: false).fetchTasks();
     });
   }
+
+  final List<Widget> _pages = [
+    // Display TaskCardsSection as the first item
+    Consumer<TaskProvider>(
+      builder: (context, taskProvider, child) {
+        return taskProvider.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+          child: TaskCardsSection(tasks: taskProvider.tasks),
+        );
+      },
+    ),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -40,6 +56,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     // Navigation logic for bottom bar items
     switch (index) {
       case 0:
+      // Tasks page logic is handled by the body with IndexedStack
         break;
       case 1:
         Navigator.push(
@@ -47,10 +64,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           MaterialPageRoute(builder: (context) => MapScreen()),
         );
         break;
-      case 1:
+      case 2:
+      // Add your Notifications screen navigation here
+        break;
+      case 3:
+      // Navigate to AccountCreationScreen when the Profile icon is tapped
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MapScreen()),
+          MaterialPageRoute(builder: (context) => AccountCreationScreen()),
         );
         break;
     }
@@ -58,8 +79,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade900,
       appBar: AppBar(
@@ -67,57 +86,79 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           'Dashboard',
           style: TextStyle(color: Colors.white),
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blueGrey.shade900,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              // Notification action
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfilePage(),
-                ),
-              );
-
+      IconButton(
+      icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+      onPressed: () {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => MyLocation(),
+        //   ),
+        // );
+      },
+      ),
+          PopupMenuButton<int>(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            onSelected: (int result) {
+              switch (result) {
+                case 0:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                  break;
+                case 1:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DashboardSelectionScreen()),
+                  );
+                  break;
+              }
             },
-          ),
-          IconButton(
-            icon: const Icon(Icons.person, color: Colors.white),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AccountCreationScreen(),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+              const PopupMenuItem<int>(
+                value: 0,
+                child: ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text('Profile'),
                 ),
-              );
-            },
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text('Logout'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
-      drawer: AdminDrawer(),
-      body: taskProvider.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-        padding: const EdgeInsets.all(8.0),
-        child: TaskCardsSection(tasks: taskProvider.tasks),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => TaskAssignmentForm(),
-            ),
+            MaterialPageRoute(builder: (context) => TaskAssignmentForm()),
           );
         },
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+        backgroundColor: Colors.blueGrey[800],
+        child: const Icon(Icons.add_box, color: Colors.white),
+      )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blueAccent,
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey[400],
+        backgroundColor: Colors.blueGrey.shade900,
+        type: BottomNavigationBarType.fixed,
+
+        selectedItemColor: Colors.teal, // Set selected item color
+        unselectedItemColor: Colors.white, // Set unselected item color
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.task),
@@ -132,7 +173,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             label: 'Notifications',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person_add_alt),
             label: 'Profile',
           ),
         ],
@@ -143,6 +184,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 }
 
+
+
+
 class TaskCardsSection extends StatelessWidget {
   final List<Task> tasks;
 
@@ -152,8 +196,17 @@ class TaskCardsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
 
+    // Sort tasks by createdAt date in descending order (latest first)
+    List<Task> sortedTasks = List.from(tasks)
+      ..sort((a, b) {
+        DateTime dateA = a.createdAt != null ? DateTime.parse(a.createdAt!) : DateTime(1970);
+        DateTime dateB = b.createdAt != null ? DateTime.parse(b.createdAt!) : DateTime(1970);
+        return dateB.compareTo(dateA); // For descending order
+      });
+
+
     return Column(
-      children: tasks.map((task) {
+      children: sortedTasks.map((task) {
         return GestureDetector(
           onTap: () {
             Provider.of<SelectedTaskProvider>(context, listen: false)
@@ -189,6 +242,20 @@ class TaskCardsSection extends StatelessWidget {
                         ),
                       ),
                       IconButton(
+                        icon: const Icon(Icons.my_location, color: Colors.teal),
+                        onPressed: () {
+                          Provider.of<SelectedTaskProvider>(context,
+                              listen: false)
+                              .selectTask(task);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MapScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      IconButton(
                         icon: const Icon(Icons.edit, color: Colors.teal),
                         onPressed: () {
                           Provider.of<SelectedTaskProvider>(context,
@@ -221,16 +288,7 @@ class TaskCardsSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      const Icon(Icons.numbers, color: Colors.grey),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Task ID: ${task.taskId ?? 'N/A'}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
+
 
                   Row(
                     children: [
@@ -244,11 +302,12 @@ class TaskCardsSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
+                    borderRadius: BorderRadius.circular(12),
                     value: (task.perStatus ?? 0) / 100,
                     backgroundColor: Colors.grey.shade300,
                     color: task.perStatus == 100
                         ? Colors.green
-                        : Colors.teal,
+                        : Colors.orange,
                     minHeight: 8,
                   ),
                 ],
@@ -260,3 +319,5 @@ class TaskCardsSection extends StatelessWidget {
     );
   }
 }
+
+

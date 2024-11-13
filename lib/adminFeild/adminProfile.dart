@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../provider/constants.dart';
+import 'AdminDashboard.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -53,11 +54,18 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.grey[850],
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminDashboardScreen(),
+              ),
+            );
+          },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {
               // Edit profile action
             },
@@ -141,3 +149,5 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
+

@@ -276,15 +276,15 @@ class EmployeeTaskDetailScreen extends StatelessWidget {
   const EmployeeTaskDetailScreen({Key? key}) : super(key: key);
 
   Future<void> ticketStatusUpdate(
-      BuildContext context,
-      String taskName,
-      String ticketName,
-      String status,
-      ) async {
+    BuildContext context,
+    String taskName,
+    String ticketName,
+    String status,
+  ) async {
     const String url = EmployeeApiConstant.taskCompletion;
     var headers = {
       'x-dhundhoo-session':
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJhZG1pbkBkaHVuZGhvby5jb20iLCJyb2xlIjoiQURNSU4iLCJvcmdIYW5kbGUiOiI0NTlmOTc3ZC05ZDU3LTQ3ZWMtOTllMy02YmRhNDQ2NGQzYmIiLCJhY2Nlc3NDb2RlIjoiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjBiMnRsYmlJNklqbGpNalE1WXpJMUxUa3hObVl0TkRBME9DMWlOalZoTFRsaU9HWmlOemhsTXpsaE9DSXNJblJwYldWemRHRnRjQ0k2TVRjeU16QXlOalEwTmpJMk5IMC5qTVRVQTJkOTJZa1V4bEJ1bVFtb0hPQzdWY0dkallsV1o2bHVqak50bzdjIiwidGltZVpvbmUiOiJVVEMrMDU6MzAiLCJ0eXBlIjoiREhVTkRIT08iLCJ2ZXJzaW9uIjoiMC4yLjAiLCJwbGF0Zm9ybSI6IldFQiIsImV4cGlyZXNBdCI6MTcyMzExMjg1NjM2OH0.ico7pR8rISZcAZZWqfJ3gpGURL1Huiuj_WqLcGNubms'
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJhZG1pbkBkaHVuZGhvby5jb20iLCJyb2xlIjoiQURNSU4iLCJvcmdIYW5kbGUiOiI0NTlmOTc3ZC05ZDU3LTQ3ZWMtOTllMy02YmRhNDQ2NGQzYmIiLCJhY2Nlc3NDb2RlIjoiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjBiMnRsYmlJNklqbGpNalE1WXpJMUxUa3hObVl0TkRBME9DMWlOalZoTFRsaU9HWmlOemhsTXpsaE9DSXNJblJwYldWemRHRnRjQ0k2TVRjeU16QXlOalEwTmpJMk5IMC5qTVRVQTJkOTJZa1V4bEJ1bVFtb0hPQzdWY0dkallsV1o2bHVqak50bzdjIiwidGltZVpvbmUiOiJVVEMrMDU6MzAiLCJ0eXBlIjoiREhVTkRIT08iLCJ2ZXJzaW9uIjoiMC4yLjAiLCJwbGF0Zm9ybSI6IldFQiIsImV4cGlyZXNBdCI6MTcyMzExMjg1NjM2OH0.ico7pR8rISZcAZZWqfJ3gpGURL1Huiuj_WqLcGNubms'
     };
 
     var request = http.Request(
@@ -312,6 +312,7 @@ class EmployeeTaskDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedEmployeeTask =
         context.watch<SelectedEmployeeTaskProvider>().selectedEmployeeTask;
+    print('Selected Employee Task: $selectedEmployeeTask');
 
     if (selectedEmployeeTask == null) {
       return const Scaffold(
@@ -324,8 +325,10 @@ class EmployeeTaskDetailScreen extends StatelessWidget {
     final tickets = selectedEmployeeTask['tickets'] as List<dynamic>;
 
     return Scaffold(
+
       appBar: AppBar(
-        backgroundColor: Colors.teal[800],
+
+        backgroundColor: Colors.blueGrey,
         title: const Text('Employee Task Details'),
         foregroundColor: Colors.white,
       ),
@@ -361,7 +364,6 @@ class EmployeeTaskDetailScreen extends StatelessWidget {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-
             Expanded(
               child: ListView.builder(
                 itemCount: tickets.length,
@@ -415,7 +417,8 @@ class EmployeeTaskDetailScreen extends StatelessWidget {
                       ),
                       trailing: GestureDetector(
                         onTap: () {
-                          final newStatus = isCompleted ? 'PENDING' : 'COMPLETED';
+                          final newStatus =
+                              isCompleted ? 'PENDING' : 'COMPLETED';
                           ticketStatusUpdate(
                             context,
                             selectedEmployeeTask['taskName'] ?? 'N/A',
